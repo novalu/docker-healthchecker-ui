@@ -1,0 +1,5 @@
+class DashboardData {
+
+}
+
+export { DashboardData }
