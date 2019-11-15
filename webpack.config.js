@@ -35,7 +35,7 @@ module.exports = (env, argv) => ({
   devtool: isDevelopment(argv) ? "eval-cheap-module-source-map" : "cheap-source-map",
 
   entry: {
-    dashboard: "./src/routes/dashboard/dashboard.script.ts",
+    dashboard: "./src/routes/dashboard/page/dashboard.script.ts",
   },
 
   output: {

@@ -1,5 +1,0 @@
-class DashboardData {
-
-}
-
-export { DashboardData }
