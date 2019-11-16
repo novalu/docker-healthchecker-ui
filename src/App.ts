@@ -5,6 +5,7 @@ import container from "./di/container";
 import {NoOpLogger} from "./utils/log/impl/NoOpLogger";
 import {SignaleLogger} from "./utils/log/impl/SignaleLogger";
 import {ServerBoot} from "./manager/ServerBoot";
+import {Configuration} from "./model/Configuration";
 
 @injectable()
 class App {
@@ -14,9 +15,11 @@ class App {
     ) {}
 
     public async start(): Promise<boolean> {
-        // construct test params
-        const images = [ "test", "test1", "test2", "test3", "test4" ];
-        return this.serverBoot.startServer(...images);
+        const configuration = new Configuration(
+            [ "test", "test1", "test2", "test3", "test4" ],
+            8080
+        );
+        return this.serverBoot.startServer(configuration);
     }
 
 }

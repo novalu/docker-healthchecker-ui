@@ -8,7 +8,8 @@ const TYPES = {
     DashboardController: Symbol("DashboardController"),
 
     Logger: Symbol("Logger"),
-    WebHandler: Symbol("WebHandler")
+    WebHandler: Symbol("WebHandler"),
+    ConfigurationValidator: Symbol("ConfigurationValidator")
 }
 
 export default TYPES;

@@ -7,6 +7,7 @@ import * as path from "path";
 import * as http from "http";
 import serveStatic from "serve-static";
 import favicon from "serve-favicon";
+import {Configuration} from "../model/Configuration";
 
 @injectable()
 class ServerBoot {
@@ -18,27 +19,24 @@ class ServerBoot {
         @inject(TYPES.Logger) public logger: Logger
     ) {}
 
-    private readonly PORT = 8080;
-
     private addListenCallback(server, callback: () => void) {
         server.on("listening", async () => {
             await callback();
         });
     }
 
-    private addServerErrorCallback(server) {
+    private addServerErrorCallback(server, configuration: Configuration) {
         server.on("error", (error: any) => {
             if (error.syscall !== "listen") {
                 throw error;
             }
-            const port = server.address().port;
             switch (error.code) {
                 case "EACCES":
-                    this.logger.fatal(`Port ${port} requires elevated privileges`);
+                    this.logger.fatal(`Port ${configuration.port} requires elevated privileges`);
                     process.exit(1);
                     break;
                 case "EADDRINUSE":
-                    this.logger.fatal(`Port ${port} is already in use`);
+                    this.logger.fatal(`Port ${configuration.port} is already in use`);
                     process.exit(1);
                     break;
                 default:
@@ -58,18 +56,18 @@ class ServerBoot {
         this.expressApp.use("/", this.dashboardController.router);
     }
 
-    private async postStart() {
-        this.logger.info(`Server listening at ${this.PORT}`);
+    private async postStart(configuration: Configuration) {
+        this.logger.info(`Docker Healthchecker UI server listening at ${configuration.port}.`);
     }
 
-    public async startServer(...images: string[]): Promise<boolean> {
-        this.dashboardController.images = images;
+    public async startServer(configuration: Configuration): Promise<boolean> {
+        this.dashboardController.images = configuration.images;
 
-        await this.createExpressApp(this.PORT);
+        await this.createExpressApp(configuration.port);
         const server = http.createServer(this.expressApp);
-        this.addListenCallback(server, async () => await this.postStart());
-        this.addServerErrorCallback(server);
-        server.listen(this.PORT);
+        this.addListenCallback(server, async () => await this.postStart(configuration));
+        this.addServerErrorCallback(server, configuration);
+        server.listen(configuration.port);
         return true;
     }
 
