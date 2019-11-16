@@ -3,6 +3,6 @@
     "js": "node",
     "pug": "node"
   },
-  "ext": "js",
+  "ext": "js,pug",
   "delay": 2000
 }

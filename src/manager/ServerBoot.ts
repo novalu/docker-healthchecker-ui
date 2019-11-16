@@ -62,7 +62,9 @@ class ServerBoot {
         this.logger.info(`Server listening at ${this.PORT}`);
     }
 
-    public async startServer(): Promise<boolean> {
+    public async startServer(...images: string[]): Promise<boolean> {
+        this.dashboardController.images = images;
+
         await this.createExpressApp(this.PORT);
         const server = http.createServer(this.expressApp);
         this.addListenCallback(server, async () => await this.postStart());

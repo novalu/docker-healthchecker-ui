@@ -1,6 +1,8 @@
+import {ContainerView} from "./ContainerView";
+
 class DashboardData {
     constructor(
-        public content: string
+        public containers: ContainerView[]
     ) {}
 }
 

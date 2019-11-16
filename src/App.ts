@@ -15,7 +15,8 @@ class App {
 
     public async start(): Promise<boolean> {
         // construct test params
-        return this.serverBoot.startServer();
+        const images = [ "test", "test1", "test2", "test3", "test4" ];
+        return this.serverBoot.startServer(...images);
     }
 
 }

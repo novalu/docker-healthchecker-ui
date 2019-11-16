@@ -13,7 +13,8 @@ class Lib {
 
     public async start(): Promise<boolean> {
         // pass params from argument
-        return this.serverBoot.startServer();
+        const images = [ "test1", "test2" ];
+        return this.serverBoot.startServer(...images);
     }
 
 }

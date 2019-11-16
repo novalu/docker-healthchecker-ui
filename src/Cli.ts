@@ -18,7 +18,8 @@ class Cli {
 
     public async start(): Promise<boolean> {
         // construct params from cli args
-        return this.serverBoot.startServer();
+        const images = [ "test1", "test2" ];
+        return this.serverBoot.startServer(...images);
     }
 
 }
