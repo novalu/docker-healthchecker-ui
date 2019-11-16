@@ -1,2 +1,4 @@
 import "reflect-metadata";
-export declare function startHealthcheckerUiServer(): Promise<boolean>;
+import { Configuration } from "./model/Configuration";
+declare const startHealthcheckerUiServer: (configuration: Configuration) => Promise<boolean>;
+export { startHealthcheckerUiServer, Configuration };

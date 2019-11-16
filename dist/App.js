@@ -27,6 +27,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const types_1 = __importDefault(require("./di/types"));
 const ServerBoot_1 = require("./manager/ServerBoot");
+const Configuration_1 = require("./model/Configuration");
 let App = class App {
     constructor(serverBoot, logger) {
         this.serverBoot = serverBoot;
@@ -34,8 +35,8 @@ let App = class App {
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
-            // construct test params
-            return this.serverBoot.startServer();
+            const configuration = new Configuration_1.Configuration(["test", "test1", "test2", "test3", "test4"], 8080);
+            return this.serverBoot.startServer(configuration);
         });
     }
 };

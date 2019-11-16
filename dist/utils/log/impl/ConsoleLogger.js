@@ -8,43 +8,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 let ConsoleLogger = class ConsoleLogger {
-    logExtra(op, extra) {
-        if (extra instanceof Error) {
-            op(this.pe.render(extra));
-        }
-        else {
-            op(extra);
-        }
-    }
     debug(body, extra) {
         console.log(body);
-        if (extra)
-            this.logExtra((extraParam) => console.log(extraParam), extra);
     }
     error(body, extra) {
         console.log(body);
-        if (extra)
-            this.logExtra((extraParam) => console.log(extraParam), extra);
     }
     info(body, extra) {
         console.log(body);
-        if (extra)
-            this.logExtra((extraParam) => console.log(extraParam), extra);
     }
     trace(body, extra) {
         console.log(body);
-        if (extra)
-            this.logExtra((extraParam) => console.log(extraParam), extra);
     }
     warn(body, extra) {
         console.log(body);
-        if (extra)
-            this.logExtra((extraParam) => console.log(extraParam), extra);
     }
     fatal(body, extra) {
         console.log(body);
-        if (extra)
-            this.logExtra((extraParam) => console.log(extraParam), extra);
     }
 };
 ConsoleLogger = __decorate([

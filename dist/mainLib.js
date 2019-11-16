@@ -16,12 +16,14 @@ require("reflect-metadata");
 const container_1 = __importDefault(require("./di/container"));
 const types_1 = __importDefault(require("./di/types"));
 const ConsoleLogger_1 = require("./utils/log/impl/ConsoleLogger");
-function startHealthcheckerUiServer() {
+const Configuration_1 = require("./model/Configuration");
+exports.Configuration = Configuration_1.Configuration;
+const startHealthcheckerUiServer = function startHealthcheckerUiServer(configuration) {
     return __awaiter(this, void 0, void 0, function* () {
         container_1.default.bind(types_1.default.Logger).to(ConsoleLogger_1.ConsoleLogger).inSingletonScope();
         const lib = container_1.default.get(types_1.default.Lib);
-        return yield lib.start();
+        return yield lib.start(configuration);
     });
-}
+};
 exports.startHealthcheckerUiServer = startHealthcheckerUiServer;
 //# sourceMappingURL=mainLib.js.map

@@ -27,23 +27,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const types_1 = __importDefault(require("./di/types"));
 const ServerBoot_1 = require("./manager/ServerBoot");
+const ConfigurationValidator_1 = require("./utils/ConfigurationValidator");
 let Lib = class Lib {
-    constructor(serverBoot, logger) {
+    constructor(serverBoot, configurationValidator, logger) {
         this.serverBoot = serverBoot;
+        this.configurationValidator = configurationValidator;
         this.logger = logger;
     }
-    start() {
+    start(configuration) {
         return __awaiter(this, void 0, void 0, function* () {
-            // pass params from argument
-            return this.serverBoot.startServer();
+            const validateResult = yield this.configurationValidator.check(configuration);
+            if (validateResult) {
+                return this.serverBoot.startServer(configuration);
+            }
         });
     }
 };
 Lib = __decorate([
     inversify_1.injectable(),
     __param(0, inversify_1.inject(types_1.default.ServerBoot)),
-    __param(1, inversify_1.inject(types_1.default.Logger)),
-    __metadata("design:paramtypes", [ServerBoot_1.ServerBoot, Object])
+    __param(1, inversify_1.inject(types_1.default.ConfigurationValidator)),
+    __param(2, inversify_1.inject(types_1.default.Logger)),
+    __metadata("design:paramtypes", [ServerBoot_1.ServerBoot,
+        ConfigurationValidator_1.ConfigurationValidator, Object])
 ], Lib);
 exports.Lib = Lib;
 //# sourceMappingURL=Lib.js.map

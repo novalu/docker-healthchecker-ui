@@ -24,26 +24,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const yargs_1 = __importDefault(require("yargs"));
 const inversify_1 = require("inversify");
 const types_1 = __importDefault(require("./di/types"));
 const ServerBoot_1 = require("./manager/ServerBoot");
+const Configuration_1 = require("./model/Configuration");
+const ConfigurationValidator_1 = require("./utils/ConfigurationValidator");
 let Cli = class Cli {
-    constructor(serverBoot, logger) {
+    constructor(serverBoot, configurationValidator, logger) {
         this.serverBoot = serverBoot;
+        this.configurationValidator = configurationValidator;
         this.logger = logger;
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
-            // construct params from cli args
-            return this.serverBoot.startServer();
+            const argv = yargs_1.default
+                .help("h")
+                .alias("h", "help")
+                //.group("image", "Main:")
+                .alias("i", "image")
+                .describe("image", "Docker image to check. Could be defined more times.")
+                .array("image")
+                .string("image")
+                .demandOption("image", "At least one image is required")
+                .alias("p", "port")
+                .describe("port", "Port, on which will server run")
+                .number("port")
+                .default("port", 8080)
+                .fail((msg, err) => {
+                console.error(msg);
+                process.exit(1);
+            })
+                .argv;
+            const images = argv.image;
+            const configuration = new Configuration_1.Configuration(images, argv.port);
+            const validateResult = yield this.configurationValidator.check(configuration);
+            if (validateResult) {
+                return this.serverBoot.startServer(configuration);
+            }
         });
     }
 };
 Cli = __decorate([
     inversify_1.injectable(),
     __param(0, inversify_1.inject(types_1.default.ServerBoot)),
-    __param(1, inversify_1.inject(types_1.default.Logger)),
-    __metadata("design:paramtypes", [ServerBoot_1.ServerBoot, Object])
+    __param(1, inversify_1.inject(types_1.default.ConfigurationValidator)),
+    __param(2, inversify_1.inject(types_1.default.Logger)),
+    __metadata("design:paramtypes", [ServerBoot_1.ServerBoot,
+        ConfigurationValidator_1.ConfigurationValidator, Object])
 ], Cli);
 exports.Cli = Cli;
 //# sourceMappingURL=Cli.js.map

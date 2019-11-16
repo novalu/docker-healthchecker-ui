@@ -1,7 +1,5 @@
 import { Logger } from "../Logger";
 declare class ConsoleLogger implements Logger {
-    private pe;
-    private logExtra;
     debug(body: string, extra?: any): void;
     error(body: string, extra?: any): void;
     info(body: string, extra?: any): void;

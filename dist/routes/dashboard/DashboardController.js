@@ -37,14 +37,19 @@ const WebHandler_1 = require("../../utils/WebHandler");
 const types_1 = __importDefault(require("../../di/types"));
 const docker_healthchecker_1 = require("docker-healthchecker");
 const DashboardData_1 = require("./model/DashboardData");
+const lodash = __importStar(require("lodash"));
+const ContainerView_1 = require("./model/ContainerView");
 let DashboardController = class DashboardController {
     constructor(webHandler) {
         this.webHandler = webHandler;
-        this.VIEW = "dashboard/page/dashboardView";
         this.router = express.Router();
         this.router.get("/", this.webHandler.await((req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            const containers = yield docker_healthchecker_1.containersHealth("test");
-            res.render(this.VIEW, new DashboardData_1.DashboardData(JSON.stringify(containers)));
+            const containers = yield docker_healthchecker_1.containersHealth(...this.images);
+            const containersViews = lodash.map(containers, (container) => {
+                return new ContainerView_1.ContainerView(container.image, container.state.text, container.state.color);
+            });
+            const view = "dashboard/page/themes/dashboardViewPlain";
+            res.render(view, new DashboardData_1.DashboardData(containersViews));
         })));
     }
 };

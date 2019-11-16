@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class DashboardData {
-    constructor(content) {
-        this.content = content;
+    constructor(containers) {
+        this.containers = containers;
     }
 }
 exports.DashboardData = DashboardData;

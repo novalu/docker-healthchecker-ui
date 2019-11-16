@@ -38,30 +38,29 @@ const DashboardController_1 = require("../routes/dashboard/DashboardController")
 const path = __importStar(require("path"));
 const http = __importStar(require("http"));
 const serve_static_1 = __importDefault(require("serve-static"));
+const serve_favicon_1 = __importDefault(require("serve-favicon"));
 let ServerBoot = class ServerBoot {
     constructor(dashboardController, logger) {
         this.dashboardController = dashboardController;
         this.logger = logger;
-        this.PORT = 8080;
     }
     addListenCallback(server, callback) {
         server.on("listening", () => __awaiter(this, void 0, void 0, function* () {
             yield callback();
         }));
     }
-    addServerErrorCallback(server) {
+    addServerErrorCallback(server, configuration) {
         server.on("error", (error) => {
             if (error.syscall !== "listen") {
                 throw error;
             }
-            const port = server.address().port;
             switch (error.code) {
                 case "EACCES":
-                    this.logger.fatal(`Port ${port} requires elevated privileges`);
+                    this.logger.fatal(`Port ${configuration.port} requires elevated privileges`);
                     process.exit(1);
                     break;
                 case "EADDRINUSE":
-                    this.logger.fatal(`Port ${port} is already in use`);
+                    this.logger.fatal(`Port ${configuration.port} is already in use`);
                     process.exit(1);
                     break;
                 default:
@@ -75,25 +74,25 @@ let ServerBoot = class ServerBoot {
             this.expressApp.set("port", port);
             this.expressApp.set("views", path.join(__dirname, "../../src/routes"));
             this.expressApp.use(serve_static_1.default(path.join(__dirname, "../../public/")));
-            //const faviconPath = path.join(__dirname, "../public/", "images/favicon.ico"); // TODO
-            //this.expressApp.use(favicon(faviconPath));
+            this.expressApp.use(serve_favicon_1.default(path.join(__dirname, "../../public/", "images/favicon.ico")));
             this.expressApp.set("view engine", "pug");
             this.expressApp.locals.pretty = true;
             this.expressApp.use("/", this.dashboardController.router);
         });
     }
-    postStart() {
+    postStart(configuration) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.logger.info(`Server listening at ${this.PORT}`);
+            this.logger.info(`Docker Healthchecker UI server listening at ${configuration.port}.`);
         });
     }
-    startServer() {
+    startServer(configuration) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.createExpressApp(this.PORT);
+            this.dashboardController.images = configuration.images;
+            yield this.createExpressApp(configuration.port);
             const server = http.createServer(this.expressApp);
-            this.addListenCallback(server, () => __awaiter(this, void 0, void 0, function* () { return yield this.postStart(); }));
-            this.addServerErrorCallback(server);
-            server.listen(this.PORT);
+            this.addListenCallback(server, () => __awaiter(this, void 0, void 0, function* () { return yield this.postStart(configuration); }));
+            this.addServerErrorCallback(server, configuration);
+            server.listen(configuration.port);
             return true;
         });
     }

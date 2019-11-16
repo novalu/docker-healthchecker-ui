@@ -1,5 +1,6 @@
+import { ContainerView } from "./ContainerView";
 declare class DashboardData {
-    content: string;
-    constructor(content: string);
+    containers: ContainerView[];
+    constructor(containers: ContainerView[]);
 }
 export { DashboardData };

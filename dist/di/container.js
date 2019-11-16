@@ -11,6 +11,7 @@ const DashboardController_1 = require("../routes/dashboard/DashboardController")
 const WebHandler_1 = require("../utils/WebHandler");
 const Lib_1 = require("../Lib");
 const ServerBoot_1 = require("../manager/ServerBoot");
+const ConfigurationValidator_1 = require("../utils/ConfigurationValidator");
 const container = new inversify_1.Container();
 container
     .bind(types_1.default.App)
@@ -35,6 +36,10 @@ container
 container
     .bind(types_1.default.WebHandler)
     .to(WebHandler_1.WebHandler)
+    .inSingletonScope();
+container
+    .bind(types_1.default.ConfigurationValidator)
+    .to(ConfigurationValidator_1.ConfigurationValidator)
     .inSingletonScope();
 exports.default = container;
 //# sourceMappingURL=container.js.map
