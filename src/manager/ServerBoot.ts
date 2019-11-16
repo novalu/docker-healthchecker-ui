@@ -6,6 +6,7 @@ import {Logger} from "../utils/log/Logger";
 import * as path from "path";
 import * as http from "http";
 import serveStatic from "serve-static";
+import favicon from "serve-favicon";
 
 @injectable()
 class ServerBoot {
@@ -51,8 +52,7 @@ class ServerBoot {
         this.expressApp.set("port", port);
         this.expressApp.set("views", path.join(__dirname, "../../src/routes"));
         this.expressApp.use(serveStatic(path.join(__dirname, "../../public/")));
-        //const faviconPath = path.join(__dirname, "../public/", "images/favicon.ico"); // TODO
-        //this.expressApp.use(favicon(faviconPath));
+        this.expressApp.use(favicon(path.join(__dirname, "../../public/", "images/favicon.ico")));
         this.expressApp.set("view engine", "pug");
         this.expressApp.locals.pretty = true;
         this.expressApp.use("/", this.dashboardController.router);
