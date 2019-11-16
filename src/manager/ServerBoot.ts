@@ -49,8 +49,8 @@ class ServerBoot {
     public async createExpressApp(port: number) {
         this.expressApp = express();
         this.expressApp.set("port", port);
-        this.expressApp.set("views", path.join(__dirname, "../src/routes"));
-        this.expressApp.use(serveStatic(path.join(__dirname, "../public/")));
+        this.expressApp.set("views", path.join(__dirname, "../../src/routes"));
+        this.expressApp.use(serveStatic(path.join(__dirname, "../../public/")));
         //const faviconPath = path.join(__dirname, "../public/", "images/favicon.ico"); // TODO
         //this.expressApp.use(favicon(faviconPath));
         this.expressApp.set("view engine", "pug");
