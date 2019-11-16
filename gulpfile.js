@@ -13,7 +13,7 @@ const frontendWatchPaths = [
 gulp.task("buildBackend", run("npm run build-backend"));
 gulp.task("watchBackend", () => { gulp.watch(backendWatchPaths, ["buildBackend"]); });
 
-gulp.task("buildFrontend", run("npm run build-frontend-debug"));
+gulp.task("buildFrontend", run("npm run build-frontend"));
 gulp.task("watchFrontend", () => { gulp.watch(frontendWatchPaths, ["buildFrontend"]); });
 
 gulp.task("build", ["buildBackend", "buildFrontend"]);
