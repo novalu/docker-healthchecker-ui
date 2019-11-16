@@ -49,7 +49,7 @@ class SignaleLogger implements Logger {
   }
 
   public trace(body: string, extra?: any) {
-    this.signale.fancyLog(body);
+    this.signale.log(body);
     if (extra) this.logExtra((extraParam) => this.signale.log(extraParam), extra);
   }
 

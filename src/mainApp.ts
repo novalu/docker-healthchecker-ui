@@ -8,18 +8,18 @@ import {Logger} from "./utils/log/Logger";
 import {SignaleLogger} from "./utils/log/impl/SignaleLogger";
 import {NoOpLogger} from "./utils/log/impl/NoOpLogger";
 
-async function startApp(images: string[]): Promise<App> {
-    container.bind<Logger>(TYPES.Logger).to(SignaleLogger);
+async function startApp(): Promise<App> {
+    container.bind<Logger>(TYPES.Logger).to(SignaleLogger).inSingletonScope();
 
     const app = container.get<App>(TYPES.App);
-    const started = await app.start(images);
+    const started = await app.start();
     return started ? app : undefined;
 }
 
 (async () => {
     let app;
     try {
-        app = await startApp([ "test:latest", "test:platest" ]);
+        app = await startApp();
     } catch (err) {
         const msg = "Cannot start application";
         if (app) {

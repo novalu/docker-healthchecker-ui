@@ -9,58 +9,24 @@ import {Logger} from "./utils/log/Logger";
 import {NoOpLogger} from "./utils/log/impl/NoOpLogger";
 import * as http from "http";
 import {SignaleLogger} from "./utils/log/impl/SignaleLogger";
+import {ConsoleLogger} from "./utils/log/impl/ConsoleLogger";
 
-const PORT = 8080;
+async function startCli(): Promise<Cli> {
+    container.bind<Logger>(TYPES.Logger).to(ConsoleLogger).inSingletonScope();
 
-function addListenCallback(server, startCallback: () => void) {
-    server.on("listening", async () => {
-        await startCallback();
-    });
-}
-
-function addServerErrorCallback(server, app: Cli) {
-    server.on("error", (error: any) => {
-        if (error.syscall !== "listen") {
-            throw error;
-        }
-        const port = server.address().port;
-        switch (error.code) {
-            case "EACCES":
-                app.logger.fatal(`Port ${port} requires elevated privileges`);
-                process.exit(1);
-                break;
-            case "EADDRINUSE":
-                app.logger.fatal(`Port ${port} is already in use`);
-                process.exit(1);
-                break;
-            default:
-                throw error;
-        }
-    });
-}
-
-async function start(): Promise<Cli> {
-    const app = container.get<Cli>(TYPES.Cli);
-    await app.init(PORT);
-    const appServer = http.createServer(app.expressApp);
-    addListenCallback(appServer, async () => {
-        app.logger.info(`Server listening`);
-        await app.start();
-    });
-    addServerErrorCallback(appServer, app);
-    appServer.listen(PORT);
-    return app;
+    const cli = container.get<Cli>(TYPES.Cli);
+    const started = await cli.start();
+    return started ? cli : undefined;
 }
 
 (async () => {
-    let app;
+    let cli;
     try {
-        container.bind<Logger>(TYPES.Logger).to(SignaleLogger);
-        app = await start();
+        cli = await startCli();
     } catch (err) {
         const msg = "Cannot start application";
-        if (app) {
-            app.logger.fatal(msg, err);
+        if (cli) {
+            cli.logger.fatal(msg, err);
         } else {
             const pe = new PrettyError();
             // tslint:disable-next-line:no-console
