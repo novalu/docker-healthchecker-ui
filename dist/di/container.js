@@ -9,6 +9,8 @@ const App_1 = require("../App");
 const Cli_1 = require("../Cli");
 const DashboardController_1 = require("../routes/dashboard/DashboardController");
 const WebHandler_1 = require("../utils/WebHandler");
+const Lib_1 = require("../Lib");
+const ServerBoot_1 = require("../manager/ServerBoot");
 const container = new inversify_1.Container();
 container
     .bind(types_1.default.App)
@@ -17,6 +19,14 @@ container
 container
     .bind(types_1.default.Cli)
     .to(Cli_1.Cli)
+    .inSingletonScope();
+container
+    .bind(types_1.default.Lib)
+    .to(Lib_1.Lib)
+    .inSingletonScope();
+container
+    .bind(types_1.default.ServerBoot)
+    .to(ServerBoot_1.ServerBoot)
     .inSingletonScope();
 container
     .bind(types_1.default.DashboardController)

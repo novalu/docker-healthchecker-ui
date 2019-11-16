@@ -26,20 +26,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const types_1 = __importDefault(require("./di/types"));
+const ServerBoot_1 = require("./manager/ServerBoot");
 let App = class App {
-    constructor(logger) {
+    constructor(serverBoot, logger) {
+        this.serverBoot = serverBoot;
         this.logger = logger;
     }
-    start(images) {
+    start() {
         return __awaiter(this, void 0, void 0, function* () {
-            return true;
+            // construct test params
+            return this.serverBoot.startServer();
         });
     }
 };
 App = __decorate([
     inversify_1.injectable(),
-    __param(0, inversify_1.inject(types_1.default.Logger)),
-    __metadata("design:paramtypes", [Object])
+    __param(0, inversify_1.inject(types_1.default.ServerBoot)),
+    __param(1, inversify_1.inject(types_1.default.Logger)),
+    __metadata("design:paramtypes", [ServerBoot_1.ServerBoot, Object])
 ], App);
 exports.App = App;
 //# sourceMappingURL=App.js.map

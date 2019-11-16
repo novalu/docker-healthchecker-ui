@@ -15,31 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const container_1 = __importDefault(require("./di/container"));
 const types_1 = __importDefault(require("./di/types"));
-const pretty_error_1 = __importDefault(require("pretty-error"));
-const SignaleLogger_1 = require("./utils/log/impl/SignaleLogger");
-function startApp() {
+const ConsoleLogger_1 = require("./utils/log/impl/ConsoleLogger");
+function startHealthcheckerUiServer() {
     return __awaiter(this, void 0, void 0, function* () {
-        container_1.default.bind(types_1.default.Logger).to(SignaleLogger_1.SignaleLogger).inSingletonScope();
-        const app = container_1.default.get(types_1.default.App);
-        const started = yield app.start();
-        return started ? app : undefined;
+        container_1.default.bind(types_1.default.Logger).to(ConsoleLogger_1.ConsoleLogger).inSingletonScope();
+        const lib = container_1.default.get(types_1.default.Lib);
+        return yield lib.start();
     });
 }
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    let app;
-    try {
-        app = yield startApp();
-    }
-    catch (err) {
-        const msg = "Cannot start application";
-        if (app) {
-            app.logger.fatal(msg, err);
-        }
-        else {
-            const pe = new pretty_error_1.default();
-            // tslint:disable-next-line:no-console
-            console.error(`${msg}, error: ${pe.render(err)}`);
-        }
-    }
-}))();
-//# sourceMappingURL=mainApp.js.map
+exports.startHealthcheckerUiServer = startHealthcheckerUiServer;
+//# sourceMappingURL=mainLib.js.map

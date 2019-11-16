@@ -62,7 +62,7 @@ let SignaleLogger = class SignaleLogger {
             this.logExtra((extraParam) => this.signale.info(extraParam), extra);
     }
     trace(body, extra) {
-        this.signale.fancyLog(body);
+        this.signale.log(body);
         if (extra)
             this.logExtra((extraParam) => this.signale.log(extraParam), extra);
     }

@@ -23,50 +23,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const types_1 = __importDefault(require("./di/types"));
-const path = __importStar(require("path"));
-const DashboardController_1 = require("./routes/dashboard/DashboardController");
-const express_1 = __importDefault(require("express"));
-const serve_static_1 = __importDefault(require("serve-static"));
+const ServerBoot_1 = require("./manager/ServerBoot");
 let Cli = class Cli {
-    constructor(dashboardController, logger) {
-        this.dashboardController = dashboardController;
+    constructor(serverBoot, logger) {
+        this.serverBoot = serverBoot;
         this.logger = logger;
-    }
-    init(port) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.expressApp = express_1.default();
-            this.expressApp.set("port", port);
-            this.expressApp.set("views", path.join(__dirname, "../src/routes"));
-            const publicPath = path.join(__dirname, "../public/");
-            //const faviconPath = path.join(__dirname, "../public/", "images/favicon.ico");
-            this.expressApp.use(serve_static_1.default(publicPath));
-            //this.expressApp.use(favicon(faviconPath));
-            this.expressApp.set("view engine", "pug");
-            this.expressApp.locals.pretty = true;
-            this.expressApp.use("/", this.dashboardController.router);
-            return true;
-        });
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
+            // construct params from cli args
+            return this.serverBoot.startServer();
         });
     }
 };
 Cli = __decorate([
     inversify_1.injectable(),
-    __param(0, inversify_1.inject(types_1.default.DashboardController)),
+    __param(0, inversify_1.inject(types_1.default.ServerBoot)),
     __param(1, inversify_1.inject(types_1.default.Logger)),
-    __metadata("design:paramtypes", [DashboardController_1.DashboardController, Object])
+    __metadata("design:paramtypes", [ServerBoot_1.ServerBoot, Object])
 ], Cli);
 exports.Cli = Cli;
 //# sourceMappingURL=Cli.js.map
