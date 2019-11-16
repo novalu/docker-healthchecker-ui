@@ -16,7 +16,8 @@
     "app-debug-watch": "nodemon --inspect dist/mainApp.js",
     "cli": "node dist/mainCli.js",
     "cli-debug": "node --inspect dist/mainCli.js",
-    "cli-debug-watch": "nodemon --inspect dist/mainCli.js"
+    "cli-debug-watch": "nodemon --inspect dist/mainCli.js",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [],
   "author": {
