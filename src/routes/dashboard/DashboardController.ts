@@ -25,7 +25,7 @@ class DashboardController {
                 const containers = await containersHealth(this.uiConfiguration);
                 const containersViews = lodash.map(containers, (container) => {
                     return new ContainerView(
-                        container.image,
+                        container.alias,
                         container.state.text,
                         container.state.color
                     );
