@@ -46,7 +46,7 @@ let DashboardController = class DashboardController {
         this.router.get("/", this.webHandler.await((req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const containers = yield docker_healthchecker_1.containersHealth(this.uiConfiguration);
             const containersViews = lodash.map(containers, (container) => {
-                return new ContainerView_1.ContainerView(container.image, container.state.text, container.state.color);
+                return new ContainerView_1.ContainerView(container.alias, container.state.text, container.state.color);
             });
             const view = "dashboard/page/themes/dashboardViewPlain";
             res.render(view, new DashboardData_1.DashboardData(containersViews));
