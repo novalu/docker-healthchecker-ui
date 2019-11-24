@@ -8,7 +8,6 @@ import {DashboardController} from "../routes/dashboard/DashboardController";
 import {WebHandler} from "../utils/WebHandler";
 import {Lib} from "../Lib";
 import {ServerBoot} from "../manager/ServerBoot";
-import {ConfigurationValidator} from "../utils/ConfigurationValidator";
 
 const container = new Container();
 
@@ -38,10 +37,6 @@ container
 container
     .bind<WebHandler>(TYPES.WebHandler)
     .to(WebHandler)
-    .inSingletonScope();
-container
-    .bind<ConfigurationValidator>(TYPES.ConfigurationValidator)
-    .to(ConfigurationValidator)
     .inSingletonScope();
 
 export default container;

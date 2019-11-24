@@ -6,13 +6,14 @@ import { containersHealth, Container, ContainerState } from "docker-healthchecke
 import { DashboardData } from "./model/DashboardData";
 import * as lodash from "lodash";
 import {ContainerView} from "./model/ContainerView";
+import {UiConfiguration} from "../../model/UiConfiguration";
 
 @injectable()
 class DashboardController {
 
     public router;
 
-    public images: string[];
+    public uiConfiguration: UiConfiguration;
 
     constructor(
         @inject(TYPES.WebHandler) private webHandler: WebHandler
@@ -21,7 +22,7 @@ class DashboardController {
         this.router.get(
             "/",
             this.webHandler.await(async (req, res, next) => {
-                const containers = await containersHealth(...this.images);
+                const containers = await containersHealth(this.uiConfiguration);
                 const containersViews = lodash.map(containers, (container) => {
                     return new ContainerView(
                         container.image,

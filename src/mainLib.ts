@@ -5,13 +5,13 @@ import TYPES from "./di/types";
 import { NoOpLogger } from "./utils/log/impl/NoOpLogger";
 import { Lib } from "./Lib";
 import {ConsoleLogger} from "./utils/log/impl/ConsoleLogger";
-import {Configuration} from "./model/Configuration";
+import { UiConfiguration } from "./model/UiConfiguration";
 
-const startHealthcheckerUiServer = async function startHealthcheckerUiServer(configuration: Configuration): Promise<boolean> {
+const startHealthcheckerUiServer = async function startHealthcheckerUiServer(uiConfiguration: UiConfiguration): Promise<boolean> {
     container.bind<Logger>(TYPES.Logger).to(ConsoleLogger).inSingletonScope();
 
     const lib = container.get<Lib>(TYPES.Lib);
-    return await lib.start(configuration);
+    return await lib.start(uiConfiguration);
 }
 
-export { startHealthcheckerUiServer, Configuration };
+export { startHealthcheckerUiServer, UiConfiguration };
