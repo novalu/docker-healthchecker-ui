@@ -1,0 +1,9 @@
+[
+  {
+    "image": "test-image1"
+  },
+  {
+    "image": "test-image2",
+    "alias": "test-alias2"
+  }
+]
