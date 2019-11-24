@@ -7,8 +7,7 @@ const TYPES = {
     ServerBoot: Symbol("ServerBoot"),
     DashboardController: Symbol("DashboardController"),
     Logger: Symbol("Logger"),
-    WebHandler: Symbol("WebHandler"),
-    ConfigurationValidator: Symbol("ConfigurationValidator")
+    WebHandler: Symbol("WebHandler")
 };
 exports.default = TYPES;
 //# sourceMappingURL=types.js.map

@@ -1,12 +1,10 @@
 import { ServerBoot } from "./manager/ServerBoot";
 import { Logger } from "./utils/log/Logger";
-import { Configuration } from "./model/Configuration";
-import { ConfigurationValidator } from "./utils/ConfigurationValidator";
+import { UiConfiguration } from "./model/UiConfiguration";
 declare class Lib {
     private serverBoot;
-    private configurationValidator;
     logger: Logger;
-    constructor(serverBoot: ServerBoot, configurationValidator: ConfigurationValidator, logger: Logger);
-    start(configuration: Configuration): Promise<boolean>;
+    constructor(serverBoot: ServerBoot, logger: Logger);
+    start(uiConfiguration: UiConfiguration): Promise<boolean>;
 }
 export { Lib };

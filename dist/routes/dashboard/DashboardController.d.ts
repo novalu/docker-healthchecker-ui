@@ -1,8 +1,9 @@
 import { WebHandler } from "../../utils/WebHandler";
+import { UiConfiguration } from "../../model/UiConfiguration";
 declare class DashboardController {
     private webHandler;
     router: any;
-    images: string[];
+    uiConfiguration: UiConfiguration;
     constructor(webHandler: WebHandler);
 }
 export { DashboardController };

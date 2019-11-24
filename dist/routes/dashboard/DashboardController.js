@@ -44,7 +44,7 @@ let DashboardController = class DashboardController {
         this.webHandler = webHandler;
         this.router = express.Router();
         this.router.get("/", this.webHandler.await((req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            const containers = yield docker_healthchecker_1.containersHealth(...this.images);
+            const containers = yield docker_healthchecker_1.containersHealth(this.uiConfiguration);
             const containersViews = lodash.map(containers, (container) => {
                 return new ContainerView_1.ContainerView(container.image, container.state.text, container.state.color);
             });

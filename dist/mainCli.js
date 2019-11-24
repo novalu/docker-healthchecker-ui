@@ -16,7 +16,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const container_1 = __importDefault(require("./di/container"));
 const types_1 = __importDefault(require("./di/types"));
-const pretty_error_1 = __importDefault(require("pretty-error"));
 const ConsoleLogger_1 = require("./utils/log/impl/ConsoleLogger");
 function startCli() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -37,9 +36,8 @@ function startCli() {
             cli.logger.fatal(msg, err);
         }
         else {
-            const pe = new pretty_error_1.default();
             // tslint:disable-next-line:no-console
-            console.error(`${msg}, error: ${pe.render(err)}`);
+            console.error(`${msg}: ${err.message}`);
         }
     }
 }))();

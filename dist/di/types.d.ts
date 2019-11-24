@@ -6,6 +6,5 @@ declare const TYPES: {
     DashboardController: symbol;
     Logger: symbol;
     WebHandler: symbol;
-    ConfigurationValidator: symbol;
 };
 export default TYPES;

@@ -39,6 +39,7 @@ const path = __importStar(require("path"));
 const http = __importStar(require("http"));
 const serve_static_1 = __importDefault(require("serve-static"));
 const serve_favicon_1 = __importDefault(require("serve-favicon"));
+const Joi = __importStar(require("@hapi/joi"));
 let ServerBoot = class ServerBoot {
     constructor(dashboardController, logger) {
         this.dashboardController = dashboardController;
@@ -49,18 +50,18 @@ let ServerBoot = class ServerBoot {
             yield callback();
         }));
     }
-    addServerErrorCallback(server, configuration) {
+    addServerErrorCallback(server, uiConfiguration) {
         server.on("error", (error) => {
             if (error.syscall !== "listen") {
                 throw error;
             }
             switch (error.code) {
                 case "EACCES":
-                    this.logger.fatal(`Port ${configuration.port} requires elevated privileges`);
+                    this.logger.fatal(`Port ${uiConfiguration.port} requires elevated privileges`);
                     process.exit(1);
                     break;
                 case "EADDRINUSE":
-                    this.logger.fatal(`Port ${configuration.port} is already in use`);
+                    this.logger.fatal(`Port ${uiConfiguration.port} is already in use`);
                     process.exit(1);
                     break;
                 default:
@@ -80,19 +81,23 @@ let ServerBoot = class ServerBoot {
             this.expressApp.use("/", this.dashboardController.router);
         });
     }
-    postStart(configuration) {
+    postStart(uiConfiguration) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.logger.info(`Docker Healthchecker UI server listening at ${configuration.port}.`);
+            this.logger.info(`Docker Healthchecker UI server listening at ${uiConfiguration.port}.`);
         });
     }
-    startServer(configuration) {
+    startServer(uiConfiguration) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.dashboardController.images = configuration.images;
-            yield this.createExpressApp(configuration.port);
+            this.dashboardController.uiConfiguration = uiConfiguration;
+            yield this.createExpressApp(uiConfiguration.port);
             const server = http.createServer(this.expressApp);
-            this.addListenCallback(server, () => __awaiter(this, void 0, void 0, function* () { return yield this.postStart(configuration); }));
-            this.addServerErrorCallback(server, configuration);
-            server.listen(configuration.port);
+            this.addListenCallback(server, () => __awaiter(this, void 0, void 0, function* () { return yield this.postStart(uiConfiguration); }));
+            this.addServerErrorCallback(server, uiConfiguration);
+            const portResult = Joi.number().port().validate(uiConfiguration.port);
+            if (portResult.error) {
+                throw new Error("Provided port is not valid");
+            }
+            server.listen(uiConfiguration.port);
             return true;
         });
     }

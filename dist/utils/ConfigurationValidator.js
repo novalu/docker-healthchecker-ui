@@ -20,53 +20,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const yargs_1 = __importDefault(require("yargs"));
+const Joi = __importStar(require("@hapi/joi"));
 const inversify_1 = require("inversify");
-const types_1 = __importDefault(require("./di/types"));
-const ServerBoot_1 = require("./manager/ServerBoot");
-const UiConfiguration_1 = require("./model/UiConfiguration");
-let Cli = class Cli {
-    constructor(serverBoot, logger) {
-        this.serverBoot = serverBoot;
+const types_1 = __importDefault(require("../di/types"));
+let ConfigurationValidator = class ConfigurationValidator {
+    constructor(logger) {
         this.logger = logger;
     }
-    start() {
+    check(configuration) {
         return __awaiter(this, void 0, void 0, function* () {
-            const argv = yargs_1.default
-                .help("h")
-                .alias("h", "help")
-                .group("image", "Images:")
-                .alias("i", "image")
-                .describe("image", "Docker image to check. Could be defined more times.")
-                .array("image")
-                .string("image")
-                .describe("images-def", "JSON file with image definition in format [{image: string, alias: string}, ...]")
-                .string("images-def")
-                .alias("p", "port")
-                .describe("port", "Port, on which will server run")
-                .number("port")
-                .default("port", 8080)
-                .fail((msg, err) => {
-                console.error(msg);
-                process.exit(1);
-            })
-                .argv;
-            const images = argv.image;
-            const imagesDef = argv.imagesDef;
-            const uiConfiguration = new UiConfiguration_1.UiConfiguration(images, imagesDef, argv.port);
-            return this.serverBoot.startServer(uiConfiguration);
+            try {
+                const imagesResult = yield Joi.array().items(Joi.string()).validateAsync(configuration.images);
+            }
+            catch (err) {
+                this.logger.error("Provided images are not valid", err);
+                return false;
+            }
+            try {
+                const portResult = yield Joi.number().port().validateAsync(configuration.port);
+            }
+            catch (err) {
+                this.logger.error("Provided port is not valid", err);
+                return false;
+            }
+            return true;
         });
     }
 };
-Cli = __decorate([
+ConfigurationValidator = __decorate([
     inversify_1.injectable(),
-    __param(0, inversify_1.inject(types_1.default.ServerBoot)),
-    __param(1, inversify_1.inject(types_1.default.Logger)),
-    __metadata("design:paramtypes", [ServerBoot_1.ServerBoot, Object])
-], Cli);
-exports.Cli = Cli;
-//# sourceMappingURL=Cli.js.map
+    __param(0, inversify_1.inject(types_1.default.Logger)),
+    __metadata("design:paramtypes", [Object])
+], ConfigurationValidator);
+exports.ConfigurationValidator = ConfigurationValidator;
+//# sourceMappingURL=ConfigurationValidator.js.map
