@@ -1,6 +1,6 @@
 {
   "name": "docker-healthchecker-ui",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "",
   "repository": "github:novalu/docker-healthchecker-ui",
   "main": "dist/mainLib.js",
@@ -10,14 +10,13 @@
     "build": "npm run build-backend && npm run build-frontend",
     "build-backend": "tsc",
     "build-frontend": "NODE_OPTIONS=--max_old_space_size=1024 webpack -d --mode development --progress --colors --bail",
-    "prepare": "npm run build",
+    "prepublishOnly": "npm run build",
     "app": "node dist/mainApp.js",
     "app-debug": "node --inspect dist/mainApp.js",
     "app-debug-watch": "nodemon --inspect dist/mainApp.js",
     "cli": "node dist/mainCli.js",
     "cli-debug": "node --inspect dist/mainCli.js",
-    "cli-debug-watch": "nodemon --inspect dist/mainCli.js",
-    "prepublishOnly": "npm run build"
+    "cli-debug-watch": "nodemon --inspect dist/mainCli.js"
   },
   "keywords": [],
   "author": {
@@ -36,7 +35,7 @@
     "bulma": "^0.8.0",
     "copy-webpack-plugin": "^5.0.5",
     "css-loader": "^3.2.0",
-    "docker-healthchecker": "^0.4.0",
+    "docker-healthchecker": "^0.6.3",
     "express": "^4.17.1",
     "file-loader": "^4.2.0",
     "fs-extra": "^8.1.0",

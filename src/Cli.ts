@@ -8,14 +8,12 @@ import * as path from "path";
 import {DashboardController} from "./routes/dashboard/DashboardController";
 import * as http from "http";
 import {ServerBoot} from "./manager/ServerBoot";
-import {Configuration} from "./model/Configuration";
-import {ConfigurationValidator} from "./utils/ConfigurationValidator";
+import { UiConfiguration } from "./model/UiConfiguration";
 
 @injectable()
 class Cli {
     constructor(
         @inject(TYPES.ServerBoot) private serverBoot: ServerBoot,
-        @inject(TYPES.ConfigurationValidator) private configurationValidator: ConfigurationValidator,
         @inject(TYPES.Logger) public logger: Logger
     ) {}
 
@@ -24,12 +22,14 @@ class Cli {
             .help("h")
             .alias("h", "help")
 
-            //.group("image", "Main:")
+            .group("image", "Images:")
             .alias("i", "image")
             .describe("image", "Docker image to check. Could be defined more times.")
             .array("image")
             .string("image")
-            .demandOption("image", "At least one image is required")
+
+            .describe("images-def", "JSON file with image definition in format [{image: string, alias: string}, ...]")
+            .string("images-def")
 
             .alias("p", "port")
             .describe("port", "Port, on which will server run")
@@ -44,12 +44,10 @@ class Cli {
             .argv;
 
         const images = argv.image as string[];
-        const configuration = new Configuration(images, argv.port);
+        const imagesDef = argv.imagesDef as string;
+        const uiConfiguration = new UiConfiguration(images, imagesDef, argv.port);
 
-        const validateResult = await this.configurationValidator.check(configuration);
-        if (validateResult) {
-            return this.serverBoot.startServer(configuration);
-        }
+        return this.serverBoot.startServer(uiConfiguration);
     }
 
 }

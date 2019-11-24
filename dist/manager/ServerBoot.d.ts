@@ -1,7 +1,7 @@
 import express from "express";
 import { DashboardController } from "../routes/dashboard/DashboardController";
 import { Logger } from "../utils/log/Logger";
-import { Configuration } from "../model/Configuration";
+import { UiConfiguration } from "../model/UiConfiguration";
 declare class ServerBoot {
     private dashboardController;
     logger: Logger;
@@ -11,6 +11,6 @@ declare class ServerBoot {
     private addServerErrorCallback;
     createExpressApp(port: number): Promise<void>;
     private postStart;
-    startServer(configuration: Configuration): Promise<boolean>;
+    startServer(uiConfiguration: UiConfiguration): Promise<boolean>;
 }
 export { ServerBoot };

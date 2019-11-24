@@ -7,7 +7,8 @@ import * as path from "path";
 import * as http from "http";
 import serveStatic from "serve-static";
 import favicon from "serve-favicon";
-import {Configuration} from "../model/Configuration";
+import * as Joi from "@hapi/joi";
+import { UiConfiguration } from "../model/UiConfiguration";
 
 @injectable()
 class ServerBoot {
@@ -25,18 +26,18 @@ class ServerBoot {
         });
     }
 
-    private addServerErrorCallback(server, configuration: Configuration) {
+    private addServerErrorCallback(server, uiConfiguration: UiConfiguration) {
         server.on("error", (error: any) => {
             if (error.syscall !== "listen") {
                 throw error;
             }
             switch (error.code) {
                 case "EACCES":
-                    this.logger.fatal(`Port ${configuration.port} requires elevated privileges`);
+                    this.logger.fatal(`Port ${uiConfiguration.port} requires elevated privileges`);
                     process.exit(1);
                     break;
                 case "EADDRINUSE":
-                    this.logger.fatal(`Port ${configuration.port} is already in use`);
+                    this.logger.fatal(`Port ${uiConfiguration.port} is already in use`);
                     process.exit(1);
                     break;
                 default:
@@ -56,18 +57,24 @@ class ServerBoot {
         this.expressApp.use("/", this.dashboardController.router);
     }
 
-    private async postStart(configuration: Configuration) {
-        this.logger.info(`Docker Healthchecker UI server listening at ${configuration.port}.`);
+    private async postStart(uiConfiguration: UiConfiguration) {
+        this.logger.info(`Docker Healthchecker UI server listening at ${uiConfiguration.port}.`);
     }
 
-    public async startServer(configuration: Configuration): Promise<boolean> {
-        this.dashboardController.images = configuration.images;
+    public async startServer(uiConfiguration: UiConfiguration): Promise<boolean> {
+        this.dashboardController.uiConfiguration = uiConfiguration;
 
-        await this.createExpressApp(configuration.port);
+        await this.createExpressApp(uiConfiguration.port);
         const server = http.createServer(this.expressApp);
-        this.addListenCallback(server, async () => await this.postStart(configuration));
-        this.addServerErrorCallback(server, configuration);
-        server.listen(configuration.port);
+        this.addListenCallback(server, async () => await this.postStart(uiConfiguration));
+        this.addServerErrorCallback(server, uiConfiguration);
+
+        const portResult = Joi.number().port().validate(uiConfiguration.port);
+        if (portResult.error) {
+            throw new Error("Provided port is not valid");
+        }
+        server.listen(uiConfiguration.port);
+
         return true;
     }
 

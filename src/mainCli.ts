@@ -3,7 +3,6 @@
 import "reflect-metadata";
 import container from "./di/container";
 import TYPES from "./di/types";
-import PrettyError from "pretty-error";
 import {Cli} from "./Cli";
 import {Logger} from "./utils/log/Logger";
 import {NoOpLogger} from "./utils/log/impl/NoOpLogger";
@@ -28,9 +27,8 @@ async function startCli(): Promise<Cli> {
         if (cli) {
             cli.logger.fatal(msg, err);
         } else {
-            const pe = new PrettyError();
             // tslint:disable-next-line:no-console
-            console.error(`${msg}, error: ${pe.render(err)}`);
+            console.error(`${msg}: ${err.message}`);
         }
     }
 })();
