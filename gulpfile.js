@@ -1,4 +1,4 @@
-const gulp = require("gulp");
+const { series, parallel, watch } = require('gulp');
 const run = require("gulp-run-command").default;
 
 const backendWatchPaths = [
@@ -8,15 +8,21 @@ const backendWatchPaths = [
 
 const frontendWatchPaths = [
   "src/routes/**/*.pcss",
+  "src/routes/**/*.script.ts"
 ];
 
-gulp.task("buildBackend", run("npm run build-backend"));
-gulp.task("watchBackend", () => { gulp.watch(backendWatchPaths, ["buildBackend"]); });
+function buildBackend() { return run("npm run build-backend")(); }
+function watchBackend() { watch(backendWatchPaths, buildBackend); }
 
-gulp.task("buildFrontend", run("npm run build-frontend"));
-gulp.task("watchFrontend", () => { gulp.watch(frontendWatchPaths, ["buildFrontend"]); });
+function buildFrontend() { return run("npm run build-frontend")(); }
+function watchFrontend() { watch(frontendWatchPaths, buildFrontend); }
 
-gulp.task("build", ["buildBackend", "buildFrontend"]);
-gulp.task("watch", ["watchBackend", "watchFrontend"]);
+var watch = parallel(watchBackend, watchFrontend);
+var build = parallel(buildBackend, buildFrontend);
 
-gulp.task("default", ["build", "watch"]);
+var buildAndWatch = parallel(build, watch);
+
+exports.watchBackend = watchBackend;
+exports.watchFrontend = watchFrontend;
+exports.watch = watch;
+exports.default = buildAndWatch;
