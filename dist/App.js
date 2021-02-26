@@ -24,10 +24,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.App = void 0;
 const inversify_1 = require("inversify");
 const types_1 = __importDefault(require("./di/types"));
 const ServerBoot_1 = require("./manager/ServerBoot");
-const UiConfiguration_1 = require("./model/UiConfiguration");
+const UiPlainConfiguration_1 = require("./model/UiPlainConfiguration");
 let App = class App {
     constructor(serverBoot, logger) {
         this.serverBoot = serverBoot;
@@ -35,7 +36,12 @@ let App = class App {
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
-            const configuration = new UiConfiguration_1.UiConfiguration(["test", "test1", "test2", "test3", "test4"], undefined, 8080);
+            // const configuration = new UiFileConfiguration(
+            //     [ "test", "test1", "test2", "test3", "test4" ],
+            //     undefined,
+            //     8080
+            // );
+            const configuration = new UiPlainConfiguration_1.UiPlainConfiguration(["mongo-festapp-nocvedcu-local"], 8080);
             return this.serverBoot.startServer(configuration);
         });
     }

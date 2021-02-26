@@ -1,10 +1,10 @@
 import { ServerBoot } from "./manager/ServerBoot";
 import { Logger } from "./utils/log/Logger";
-import { UiConfiguration } from "./model/UiConfiguration";
+import { UiFileConfiguration } from "./model/UiFileConfiguration";
 declare class Lib {
     private serverBoot;
     logger: Logger;
     constructor(serverBoot: ServerBoot, logger: Logger);
-    start(uiConfiguration: UiConfiguration): Promise<boolean>;
+    start(uiConfiguration: UiFileConfiguration): Promise<boolean>;
 }
 export { Lib };

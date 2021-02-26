@@ -13,7 +13,7 @@ html
         h1.title Containers status
         each container in containers
           p.subtitle(style={ "margin-bottom": "0px" })
-            span=`${container.image}: `
-            strong(style={ color: container.healthColor })=container.healthText
+            span=`${container.alias}: `
+            strong(style={ color: container.stateColor })=container.stateText
 
   script(src='/dashboard.js')

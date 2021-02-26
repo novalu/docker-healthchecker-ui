@@ -24,11 +24,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Cli = void 0;
 const yargs_1 = __importDefault(require("yargs"));
 const inversify_1 = require("inversify");
 const types_1 = __importDefault(require("./di/types"));
 const ServerBoot_1 = require("./manager/ServerBoot");
-const UiConfiguration_1 = require("./model/UiConfiguration");
+const UiFileConfiguration_1 = require("./model/UiFileConfiguration");
+const UiPlainConfiguration_1 = require("./model/UiPlainConfiguration");
 let Cli = class Cli {
     constructor(serverBoot, logger) {
         this.serverBoot = serverBoot;
@@ -55,10 +57,18 @@ let Cli = class Cli {
                 process.exit(1);
             })
                 .argv;
-            const images = argv.image;
-            const imagesDef = argv.imagesDef;
-            const uiConfiguration = new UiConfiguration_1.UiConfiguration(images, imagesDef, argv.port);
-            return this.serverBoot.startServer(uiConfiguration);
+            let configuration;
+            if (argv.image !== undefined) {
+                configuration = new UiPlainConfiguration_1.UiPlainConfiguration(argv.image, argv.port);
+            }
+            else if (argv.imagesFile !== undefined) {
+                configuration = new UiFileConfiguration_1.UiFileConfiguration(argv.imagesFile, argv.port);
+            }
+            else {
+                console.log("Image or imagesFile parameter should be provided.");
+                return;
+            }
+            return this.serverBoot.startServer(configuration);
         });
     }
 };

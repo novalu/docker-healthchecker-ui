@@ -1,9 +1,10 @@
 import { WebHandler } from "../../utils/WebHandler";
-import { UiConfiguration } from "../../model/UiConfiguration";
+import { UiFileConfiguration } from "../../model/UiFileConfiguration";
+import { UiPlainConfiguration } from "../../model/UiPlainConfiguration";
 declare class DashboardController {
     private webHandler;
     router: any;
-    uiConfiguration: UiConfiguration;
+    uiConfiguration: UiFileConfiguration | UiPlainConfiguration;
     constructor(webHandler: WebHandler);
 }
 export { DashboardController };

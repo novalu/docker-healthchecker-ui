@@ -1,7 +1,7 @@
 declare class ContainerView {
-    image: string;
-    healthText: string;
-    healthColor: string;
-    constructor(image: string, healthText: string, healthColor: string);
+    alias: string;
+    stateText: string;
+    stateColor: string;
+    constructor(alias: string, stateText: string, stateColor: string);
 }
 export { ContainerView };

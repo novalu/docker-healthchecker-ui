@@ -1,4 +1,5 @@
 import "reflect-metadata";
-import { UiConfiguration } from "./model/UiConfiguration";
-declare const startHealthcheckerUiServer: (uiConfiguration: UiConfiguration) => Promise<boolean>;
-export { startHealthcheckerUiServer, UiConfiguration };
+import { UiFileConfiguration } from "./model/UiFileConfiguration";
+import { UiPlainConfiguration } from "./model/UiPlainConfiguration";
+declare const startHealthcheckerUiServer: (uiConfiguration: UiFileConfiguration) => Promise<boolean>;
+export { startHealthcheckerUiServer, UiFileConfiguration, UiPlainConfiguration };

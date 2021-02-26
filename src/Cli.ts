@@ -8,7 +8,9 @@ import * as path from "path";
 import {DashboardController} from "./routes/dashboard/DashboardController";
 import * as http from "http";
 import {ServerBoot} from "./manager/ServerBoot";
-import { UiConfiguration } from "./model/UiConfiguration";
+import { UiFileConfiguration } from "./model/UiFileConfiguration";
+import { Configuration } from "docker-healthchecker";
+import { UiPlainConfiguration } from "./model/UiPlainConfiguration";
 
 @injectable()
 class Cli {
@@ -43,11 +45,17 @@ class Cli {
 
             .argv;
 
-        const images = argv.image as string[];
-        const imagesDef = argv.imagesDef as string;
-        const uiConfiguration = new UiConfiguration(images, imagesDef, argv.port);
+        let configuration: UiPlainConfiguration | UiFileConfiguration;
+        if (argv.image !== undefined) {
+            configuration = new UiPlainConfiguration(argv.image as string[], argv.port);
+        } else if (argv.imagesFile !== undefined) {
+            configuration = new UiFileConfiguration(argv.imagesFile as string, argv.port);
+        } else {
+            console.log("Image or imagesFile parameter should be provided.");
+            return;
+        }
 
-        return this.serverBoot.startServer(uiConfiguration);
+        return this.serverBoot.startServer(configuration);
     }
 
 }

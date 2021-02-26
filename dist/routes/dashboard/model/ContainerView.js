@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ContainerView = void 0;
 class ContainerView {
-    constructor(image, healthText, healthColor) {
-        this.image = image;
-        this.healthText = healthText;
-        this.healthColor = healthColor;
+    constructor(alias, stateText, stateColor) {
+        this.alias = alias;
+        this.stateText = stateText;
+        this.stateColor = stateColor;
     }
 }
 exports.ContainerView = ContainerView;

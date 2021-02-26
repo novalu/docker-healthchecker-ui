@@ -2,7 +2,7 @@ import {inject, injectable} from "inversify";
 import TYPES from "./di/types";
 import {ServerBoot} from "./manager/ServerBoot";
 import {Logger} from "./utils/log/Logger";
-import { UiConfiguration } from "./model/UiConfiguration";
+import { UiFileConfiguration } from "./model/UiFileConfiguration";
 
 @injectable()
 class Lib {
@@ -12,7 +12,7 @@ class Lib {
         @inject(TYPES.Logger) public logger: Logger
     ) {}
 
-    public async start(uiConfiguration: UiConfiguration): Promise<boolean> {
+    public async start(uiConfiguration: UiFileConfiguration): Promise<boolean> {
         return this.serverBoot.startServer(uiConfiguration);
     }
 

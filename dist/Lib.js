@@ -24,6 +24,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Lib = void 0;
 const inversify_1 = require("inversify");
 const types_1 = __importDefault(require("./di/types"));
 const ServerBoot_1 = require("./manager/ServerBoot");

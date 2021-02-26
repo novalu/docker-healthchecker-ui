@@ -8,7 +8,8 @@ import * as http from "http";
 import serveStatic from "serve-static";
 import favicon from "serve-favicon";
 import * as Joi from "@hapi/joi";
-import { UiConfiguration } from "../model/UiConfiguration";
+import { UiFileConfiguration } from "../model/UiFileConfiguration";
+import {UiPlainConfiguration} from "../model/UiPlainConfiguration";
 
 @injectable()
 class ServerBoot {
@@ -26,7 +27,7 @@ class ServerBoot {
         });
     }
 
-    private addServerErrorCallback(server, uiConfiguration: UiConfiguration) {
+    private addServerErrorCallback(server, uiConfiguration: UiFileConfiguration | UiPlainConfiguration) {
         server.on("error", (error: any) => {
             if (error.syscall !== "listen") {
                 throw error;
@@ -57,11 +58,11 @@ class ServerBoot {
         this.expressApp.use("/", this.dashboardController.router);
     }
 
-    private async postStart(uiConfiguration: UiConfiguration) {
+    private async postStart(uiConfiguration: UiFileConfiguration | UiPlainConfiguration) {
         this.logger.info(`Docker Healthchecker UI server listening at ${uiConfiguration.port}.`);
     }
 
-    public async startServer(uiConfiguration: UiConfiguration): Promise<boolean> {
+    public async startServer(uiConfiguration: UiFileConfiguration | UiPlainConfiguration): Promise<boolean> {
         this.dashboardController.uiConfiguration = uiConfiguration;
 
         await this.createExpressApp(uiConfiguration.port);

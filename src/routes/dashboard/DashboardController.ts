@@ -6,14 +6,15 @@ import { containersHealth, Container, ContainerState } from "docker-healthchecke
 import { DashboardData } from "./model/DashboardData";
 import * as lodash from "lodash";
 import {ContainerView} from "./model/ContainerView";
-import {UiConfiguration} from "../../model/UiConfiguration";
+import {UiFileConfiguration} from "../../model/UiFileConfiguration";
+import {UiPlainConfiguration} from "../../model/UiPlainConfiguration";
 
 @injectable()
 class DashboardController {
 
     public router;
 
-    public uiConfiguration: UiConfiguration;
+    public uiConfiguration: UiFileConfiguration | UiPlainConfiguration;
 
     constructor(
         @inject(TYPES.WebHandler) private webHandler: WebHandler
