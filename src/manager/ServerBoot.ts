@@ -50,9 +50,10 @@ class ServerBoot {
     public async createExpressApp(port: number) {
         this.expressApp = express();
         this.expressApp.set("port", port);
-        this.expressApp.set("views", path.join(__dirname, "../../src/routes"));
         this.expressApp.use(serveStatic(path.join(__dirname, "../../public/")));
         this.expressApp.use(favicon(path.join(__dirname, "../../public/", "images/favicon.ico")));
+        this.expressApp.set("views", path.join(__dirname, "../../../src/routes"));
+        console.log(path.join(__dirname, "../../../src/routes"));
         this.expressApp.set("view engine", "pug");
         this.expressApp.locals.pretty = true;
         this.expressApp.use("/", this.dashboardController.router);
