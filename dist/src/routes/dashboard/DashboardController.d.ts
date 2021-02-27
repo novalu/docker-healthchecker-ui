@@ -1,10 +1,10 @@
-import { WebHandler } from "../../utils/WebHandler";
 import { UiFileConfiguration } from "../../model/UiFileConfiguration";
 import { UiPlainConfiguration } from "../../model/UiPlainConfiguration";
+import Router from "koa-router";
 declare class DashboardController {
-    private webHandler;
-    router: any;
+    router: Router;
     uiConfiguration: UiFileConfiguration | UiPlainConfiguration;
-    constructor(webHandler: WebHandler);
+    private serve;
+    install(router: Router): void;
 }
 export { DashboardController };

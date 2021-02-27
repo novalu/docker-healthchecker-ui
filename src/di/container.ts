@@ -6,7 +6,6 @@ import { Test } from "../test/Test";
 import {App} from "../App";
 import {DashboardController} from "../routes/dashboard/DashboardController";
 import {WebHandler} from "../utils/WebHandler";
-import {Lib} from "../lib/Lib";
 import {ServerBoot} from "../manager/ServerBoot";
 
 const container = new Container();

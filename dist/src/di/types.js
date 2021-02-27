@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const TYPES = {
     Test: Symbol("Test"),
     App: Symbol("App"),
-    Lib: Symbol("Lib"),
     ServerBoot: Symbol("ServerBoot"),
     DashboardController: Symbol("DashboardController"),
     Logger: Symbol("Logger"),

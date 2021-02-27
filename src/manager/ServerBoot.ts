@@ -1,20 +1,25 @@
 import {inject, injectable} from "inversify";
-import express from "express";
 import TYPES from "../di/types";
 import {DashboardController} from "../routes/dashboard/DashboardController";
 import {Logger} from "../utils/log/Logger";
 import * as path from "path";
 import * as http from "http";
-import serveStatic from "serve-static";
-import favicon from "serve-favicon";
 import * as Joi from "@hapi/joi";
 import { UiFileConfiguration } from "../model/UiFileConfiguration";
 import {UiPlainConfiguration} from "../model/UiPlainConfiguration";
+import Koa from "koa";
+import Pug from "koa-pug";
+import Compress from "koa-compress";
+import Favicon from "koa-favicon";
+import Serve from "koa-static";
+import Mount from "koa-mount";
+import Router from "koa-router";
+import Helmet from "koa-helmet";
 
 @injectable()
 class ServerBoot {
 
-    public expressApp: express.Application;
+    public koa: Koa;
 
     constructor(
         @inject(TYPES.DashboardController) private dashboardController: DashboardController,
@@ -47,16 +52,24 @@ class ServerBoot {
         });
     }
 
-    public async createExpressApp(port: number) {
-        this.expressApp = express();
-        this.expressApp.set("port", port);
-        this.expressApp.use(serveStatic(path.join(__dirname, "../../public/")));
-        this.expressApp.use(favicon(path.join(__dirname, "../../public/", "images/favicon.ico")));
-        this.expressApp.set("views", path.join(__dirname, "../../../src/routes"));
-        console.log(path.join(__dirname, "../../../src/routes"));
-        this.expressApp.set("view engine", "pug");
-        this.expressApp.locals.pretty = true;
-        this.expressApp.use("/", this.dashboardController.router);
+    public async createApp(port: number) {
+        this.koa = new Koa();
+        const pug = new Pug({
+            viewPath: path.join(__dirname, "../../../src/routes"),
+            pretty: true
+        });
+        pug.use(this.koa);
+        this.koa.use(Compress());
+        this.koa.use(Favicon(path.join(__dirname, "../../public/", "images/favicon.ico")));
+        this.koa.use(Mount("/", Serve(path.join(__dirname, "../../public/"))));
+        this.koa.use(Helmet());
+    }
+
+    private installRoutes() {
+        const router: Router = new Router();
+        this.dashboardController.install(router);
+        this.koa.use(router.routes());
+        this.koa.use(router.allowedMethods());
     }
 
     private async postStart(uiConfiguration: UiFileConfiguration | UiPlainConfiguration) {
@@ -66,9 +79,10 @@ class ServerBoot {
     public async startServer(uiConfiguration: UiFileConfiguration | UiPlainConfiguration): Promise<boolean> {
         this.dashboardController.uiConfiguration = uiConfiguration;
 
-        await this.createExpressApp(uiConfiguration.port);
-        const server = http.createServer(this.expressApp);
-        this.addListenCallback(server, async () => await this.postStart(uiConfiguration));
+        await this.createApp(uiConfiguration.port);
+        this.installRoutes();
+        const server = http.createServer(this.koa.callback());
+        this.addListenCallback(server, async () => this.postStart(uiConfiguration));
         this.addServerErrorCallback(server, uiConfiguration);
 
         const portResult = Joi.number().port().validate(uiConfiguration.port);

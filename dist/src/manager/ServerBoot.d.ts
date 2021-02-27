@@ -1,16 +1,17 @@
-import express from "express";
 import { DashboardController } from "../routes/dashboard/DashboardController";
 import { Logger } from "../utils/log/Logger";
 import { UiFileConfiguration } from "../model/UiFileConfiguration";
 import { UiPlainConfiguration } from "../model/UiPlainConfiguration";
+import Koa from "koa";
 declare class ServerBoot {
     private dashboardController;
     logger: Logger;
-    expressApp: express.Application;
+    koa: Koa;
     constructor(dashboardController: DashboardController, logger: Logger);
     private addListenCallback;
     private addServerErrorCallback;
-    createExpressApp(port: number): Promise<void>;
+    createApp(port: number): Promise<void>;
+    private installRoutes;
     private postStart;
     startServer(uiConfiguration: UiFileConfiguration | UiPlainConfiguration): Promise<boolean>;
 }

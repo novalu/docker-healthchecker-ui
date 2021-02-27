@@ -9,7 +9,6 @@ const Test_1 = require("../test/Test");
 const App_1 = require("../App");
 const DashboardController_1 = require("../routes/dashboard/DashboardController");
 const WebHandler_1 = require("../utils/WebHandler");
-const Lib_1 = require("../lib/Lib");
 const ServerBoot_1 = require("../manager/ServerBoot");
 const container = new inversify_1.Container();
 container
@@ -19,10 +18,6 @@ container
 container
     .bind(types_1.default.App)
     .to(App_1.App)
-    .inSingletonScope();
-container
-    .bind(types_1.default.Lib)
-    .to(Lib_1.Lib)
     .inSingletonScope();
 container
     .bind(types_1.default.ServerBoot)

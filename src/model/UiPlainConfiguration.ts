@@ -5,7 +5,7 @@ class UiPlainConfiguration extends PlainConfiguration{
         images: string[],
         public port: number = 8080
     ) {
-        super(images, [new ConsoleConsumerOptions(false)]);
+        super(images, []);
     }
 }
 

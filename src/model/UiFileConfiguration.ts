@@ -5,7 +5,7 @@ class UiFileConfiguration extends FileConfiguration {
         filePath: string,
         public port: number = 8080
     ) {
-        super(filePath, [new ConsoleConsumerOptions(false)]);
+        super(filePath, []);
     }
 }
 

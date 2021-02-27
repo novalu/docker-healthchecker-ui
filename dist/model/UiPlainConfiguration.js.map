@@ -1,1 +1,0 @@
-{"version":3,"file":"UiPlainConfiguration.js","sourceRoot":"","sources":["../../src/model/UiPlainConfiguration.ts"],"names":[],"mappings":";;;AAAA,+DAA+F;AAE/F,MAAM,oBAAqB,SAAQ,yCAAkB;IACjD,YACI,MAAgB,EACT,OAAe,IAAI;QAE1B,KAAK,CAAC,MAAM,EAAE,CAAC,IAAI,6CAAsB,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC;QAF5C,SAAI,GAAJ,IAAI,CAAe;IAG9B,CAAC;CACJ;AAEQ,oDAAoB"}

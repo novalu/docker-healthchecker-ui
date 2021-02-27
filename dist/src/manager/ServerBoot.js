@@ -45,14 +45,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServerBoot = void 0;
 const inversify_1 = require("inversify");
-const express_1 = __importDefault(require("express"));
 const types_1 = __importDefault(require("../di/types"));
 const DashboardController_1 = require("../routes/dashboard/DashboardController");
 const path = __importStar(require("path"));
 const http = __importStar(require("http"));
-const serve_static_1 = __importDefault(require("serve-static"));
-const serve_favicon_1 = __importDefault(require("serve-favicon"));
 const Joi = __importStar(require("@hapi/joi"));
+const koa_1 = __importDefault(require("koa"));
+const koa_pug_1 = __importDefault(require("koa-pug"));
+const koa_compress_1 = __importDefault(require("koa-compress"));
+const koa_favicon_1 = __importDefault(require("koa-favicon"));
+const koa_static_1 = __importDefault(require("koa-static"));
+const koa_mount_1 = __importDefault(require("koa-mount"));
+const koa_router_1 = __importDefault(require("koa-router"));
+const koa_helmet_1 = __importDefault(require("koa-helmet"));
 let ServerBoot = class ServerBoot {
     constructor(dashboardController, logger) {
         this.dashboardController = dashboardController;
@@ -82,18 +87,26 @@ let ServerBoot = class ServerBoot {
             }
         });
     }
-    createExpressApp(port) {
+    createApp(port) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.expressApp = express_1.default();
-            this.expressApp.set("port", port);
-            this.expressApp.use(serve_static_1.default(path.join(__dirname, "../../public/")));
-            this.expressApp.use(serve_favicon_1.default(path.join(__dirname, "../../public/", "images/favicon.ico")));
-            this.expressApp.set("views", path.join(__dirname, "../../../src/routes"));
+            this.koa = new koa_1.default();
+            const pug = new koa_pug_1.default({
+                viewPath: path.join(__dirname, "../../../src/routes"),
+                pretty: true
+            });
             console.log(path.join(__dirname, "../../../src/routes"));
-            this.expressApp.set("view engine", "pug");
-            this.expressApp.locals.pretty = true;
-            this.expressApp.use("/", this.dashboardController.router);
+            pug.use(this.koa);
+            this.koa.use(koa_compress_1.default());
+            this.koa.use(koa_favicon_1.default(path.join(__dirname, "../../public/", "images/favicon.ico")));
+            this.koa.use(koa_mount_1.default("/", koa_static_1.default(path.join(__dirname, "../../public/"))));
+            this.koa.use(koa_helmet_1.default());
         });
+    }
+    installRoutes() {
+        const router = new koa_router_1.default();
+        this.dashboardController.install(router);
+        this.koa.use(router.routes());
+        this.koa.use(router.allowedMethods());
     }
     postStart(uiConfiguration) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -103,9 +116,10 @@ let ServerBoot = class ServerBoot {
     startServer(uiConfiguration) {
         return __awaiter(this, void 0, void 0, function* () {
             this.dashboardController.uiConfiguration = uiConfiguration;
-            yield this.createExpressApp(uiConfiguration.port);
-            const server = http.createServer(this.expressApp);
-            this.addListenCallback(server, () => __awaiter(this, void 0, void 0, function* () { return yield this.postStart(uiConfiguration); }));
+            yield this.createApp(uiConfiguration.port);
+            this.installRoutes();
+            const server = http.createServer(this.koa.callback());
+            this.addListenCallback(server, () => __awaiter(this, void 0, void 0, function* () { return this.postStart(uiConfiguration); }));
             this.addServerErrorCallback(server, uiConfiguration);
             const portResult = Joi.number().port().validate(uiConfiguration.port);
             if (portResult.error) {
