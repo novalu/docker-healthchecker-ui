@@ -1,5 +1,4 @@
-import {Configuration, FileConfiguration} from "docker-healthchecker";
-import {ConsoleConsumerOptions} from "docker-healthchecker";
+import {Configuration, FileConfiguration, ConsoleConsumerOptions} from "docker-healthchecker";
 
 class UiFileConfiguration extends FileConfiguration {
     constructor(

@@ -24,59 +24,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.App = void 0;
-const yargs_1 = __importDefault(require("yargs"));
+exports.Lib = void 0;
 const inversify_1 = require("inversify");
-const types_1 = __importDefault(require("./di/types"));
-const ServerBoot_1 = require("./manager/ServerBoot");
-const UiFileConfiguration_1 = require("./model/UiFileConfiguration");
-const UiPlainConfiguration_1 = require("./model/UiPlainConfiguration");
-let App = class App {
+const types_1 = __importDefault(require("../di/types"));
+const ServerBoot_1 = require("../manager/ServerBoot");
+let Lib = class Lib {
     constructor(serverBoot, logger) {
         this.serverBoot = serverBoot;
         this.logger = logger;
     }
-    start() {
+    start(uiConfiguration) {
         return __awaiter(this, void 0, void 0, function* () {
-            const argv = yargs_1.default
-                .help("h")
-                .alias("h", "help")
-                .group("image", "Images:")
-                .alias("i", "image")
-                .describe("image", "Docker image to check. Could be defined more times.")
-                .array("image")
-                .string("image")
-                .describe("images-def", "JSON file with image definition in format [{image: string, alias: string}, ...]")
-                .string("images-def")
-                .alias("p", "port")
-                .describe("port", "Port, on which will server run")
-                .number("port")
-                .default("port", 8080)
-                .fail((msg, err) => {
-                console.error(msg);
-                process.exit(1);
-            })
-                .argv;
-            let configuration;
-            if (argv.image !== undefined) {
-                configuration = new UiPlainConfiguration_1.UiPlainConfiguration(argv.image, argv.port);
-            }
-            else if (argv.imagesFile !== undefined) {
-                configuration = new UiFileConfiguration_1.UiFileConfiguration(argv.imagesFile, argv.port);
-            }
-            else {
-                console.log("Image or imagesFile parameter should be provided.");
-                return;
-            }
-            return this.serverBoot.startServer(configuration);
+            return this.serverBoot.startServer(uiConfiguration);
         });
     }
 };
-App = __decorate([
+Lib = __decorate([
     inversify_1.injectable(),
     __param(0, inversify_1.inject(types_1.default.ServerBoot)),
     __param(1, inversify_1.inject(types_1.default.Logger)),
     __metadata("design:paramtypes", [ServerBoot_1.ServerBoot, Object])
-], App);
-exports.App = App;
-//# sourceMappingURL=App.js.map
+], Lib);
+exports.Lib = Lib;
+//# sourceMappingURL=Lib.js.map

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const TYPES = {
+    Test: Symbol("Test"),
     App: Symbol("App"),
-    Cli: Symbol("Cli"),
     Lib: Symbol("Lib"),
     ServerBoot: Symbol("ServerBoot"),
     DashboardController: Symbol("DashboardController"),

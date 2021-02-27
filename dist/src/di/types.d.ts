@@ -1,6 +1,6 @@
 declare const TYPES: {
+    Test: symbol;
     App: symbol;
-    Cli: symbol;
     Lib: symbol;
     ServerBoot: symbol;
     DashboardController: symbol;

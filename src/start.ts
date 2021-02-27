@@ -3,29 +3,29 @@
 import "reflect-metadata";
 import container from "./di/container";
 import TYPES from "./di/types";
-import {Cli} from "./Cli";
+import {App} from "./App";
 import {Logger} from "./utils/log/Logger";
 import {NoOpLogger} from "./utils/log/impl/NoOpLogger";
 import * as http from "http";
 import {SignaleLogger} from "./utils/log/impl/SignaleLogger";
 import {ConsoleLogger} from "./utils/log/impl/ConsoleLogger";
 
-async function startCli(): Promise<Cli> {
+async function start(): Promise<App> {
     container.bind<Logger>(TYPES.Logger).to(ConsoleLogger).inSingletonScope();
 
-    const cli = container.get<Cli>(TYPES.Cli);
+    const cli = container.get<App>(TYPES.App);
     const started = await cli.start();
-    return started ? cli : undefined;
+    return started ? cli : undefined;
 }
 
 (async () => {
-    let cli;
+    let app;
     try {
-        cli = await startCli();
+        app = await start();
     } catch (err) {
         const msg = "Cannot start application";
-        if (cli) {
-            cli.logger.fatal(msg, err);
+        if (app) {
+            app.logger.fatal(msg, err);
         } else {
             // tslint:disable-next-line:no-console
             console.error(`${msg}: ${err.message}`);

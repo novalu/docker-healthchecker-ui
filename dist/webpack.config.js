@@ -76,8 +76,7 @@ module.exports = (env, argv) => ({
                                     "postcss-url",
                                     "postcss-inherit",
                                     "postcss-nested",
-                                    "postcss-custom-properties",
-                                    "postcss-clean"
+                                    "postcss-custom-properties"
                                 ]
                             }
                         }
