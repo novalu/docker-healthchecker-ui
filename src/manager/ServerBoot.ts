@@ -65,9 +65,9 @@ class ServerBoot {
         this.koa.use(Helmet());
     }
 
-    private installRoutes() {
+    private installRoutes(uiConfiguration: UiFileConfiguration | UiPlainConfiguration) {
         const router: Router = new Router();
-        this.dashboardController.install(router);
+        this.dashboardController.install(router, uiConfiguration);
         this.koa.use(router.routes());
         this.koa.use(router.allowedMethods());
     }
@@ -77,10 +77,8 @@ class ServerBoot {
     }
 
     public async startServer(uiConfiguration: UiFileConfiguration | UiPlainConfiguration): Promise<boolean> {
-        this.dashboardController.uiConfiguration = uiConfiguration;
-
         await this.createApp(uiConfiguration.port);
-        this.installRoutes();
+        this.installRoutes(uiConfiguration);
         const server = http.createServer(this.koa.callback());
         this.addListenCallback(server, async () => this.postStart(uiConfiguration));
         this.addServerErrorCallback(server, uiConfiguration);

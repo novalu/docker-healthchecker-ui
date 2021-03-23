@@ -31,8 +31,9 @@ class DashboardController {
         await ctx.render(view, data);
     }
 
-    public install(router: Router) {
+    public install(router: Router, uiConfiguration: UiFileConfiguration | UiPlainConfiguration) {
         this.router = router;
+        this.uiConfiguration = uiConfiguration;
 
         router.get("/", async (ctx, next) => {
             await this.serve(ctx);
