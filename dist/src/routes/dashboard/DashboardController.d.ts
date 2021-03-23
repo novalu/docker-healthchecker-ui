@@ -5,6 +5,6 @@ declare class DashboardController {
     router: Router;
     uiConfiguration: UiFileConfiguration | UiPlainConfiguration;
     private serve;
-    install(router: Router): void;
+    install(router: Router, uiConfiguration: UiFileConfiguration | UiPlainConfiguration): void;
 }
 export { DashboardController };

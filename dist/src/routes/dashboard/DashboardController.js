@@ -50,11 +50,11 @@ let DashboardController = class DashboardController {
             const view = "dashboard/page/themes/dashboardViewPlain";
             const data = new DashboardData_1.DashboardData(containersViews);
             yield ctx.render(view, data);
-            //ctx.body = {a:1};
         });
     }
-    install(router) {
+    install(router, uiConfiguration) {
         this.router = router;
+        this.uiConfiguration = uiConfiguration;
         router.get("/", (ctx, next) => __awaiter(this, void 0, void 0, function* () {
             yield this.serve(ctx);
         }));

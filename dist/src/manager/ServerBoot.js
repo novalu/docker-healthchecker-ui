@@ -94,7 +94,6 @@ let ServerBoot = class ServerBoot {
                 viewPath: path.join(__dirname, "../../../src/routes"),
                 pretty: true
             });
-            console.log(path.join(__dirname, "../../../src/routes"));
             pug.use(this.koa);
             this.koa.use(koa_compress_1.default());
             this.koa.use(koa_favicon_1.default(path.join(__dirname, "../../public/", "images/favicon.ico")));
@@ -102,9 +101,9 @@ let ServerBoot = class ServerBoot {
             this.koa.use(koa_helmet_1.default());
         });
     }
-    installRoutes() {
+    installRoutes(uiConfiguration) {
         const router = new koa_router_1.default();
-        this.dashboardController.install(router);
+        this.dashboardController.install(router, uiConfiguration);
         this.koa.use(router.routes());
         this.koa.use(router.allowedMethods());
     }
@@ -115,9 +114,8 @@ let ServerBoot = class ServerBoot {
     }
     startServer(uiConfiguration) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.dashboardController.uiConfiguration = uiConfiguration;
             yield this.createApp(uiConfiguration.port);
-            this.installRoutes();
+            this.installRoutes(uiConfiguration);
             const server = http.createServer(this.koa.callback());
             this.addListenCallback(server, () => __awaiter(this, void 0, void 0, function* () { return this.postStart(uiConfiguration); }));
             this.addServerErrorCallback(server, uiConfiguration);
