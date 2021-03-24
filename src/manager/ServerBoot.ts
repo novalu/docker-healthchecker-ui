@@ -62,7 +62,13 @@ class ServerBoot {
         this.koa.use(Compress());
         this.koa.use(Favicon(path.join(__dirname, "../../public/", "images/favicon.ico")));
         this.koa.use(Mount("/", Serve(path.join(__dirname, "../../public/"))));
-        this.koa.use(Helmet());
+        this.koa.use(Helmet({
+            contentSecurityPolicy: {
+                directives: {
+                    defaultSrc: [ "'self'", "'unsafe-inline'" ]
+                }
+            }
+        }));
     }
 
     private installRoutes(uiConfiguration: UiFileConfiguration | UiPlainConfiguration) {
