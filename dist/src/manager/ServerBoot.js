@@ -98,7 +98,13 @@ let ServerBoot = class ServerBoot {
             this.koa.use(koa_compress_1.default());
             this.koa.use(koa_favicon_1.default(path.join(__dirname, "../../public/", "images/favicon.ico")));
             this.koa.use(koa_mount_1.default("/", koa_static_1.default(path.join(__dirname, "../../public/"))));
-            this.koa.use(koa_helmet_1.default());
+            this.koa.use(koa_helmet_1.default({
+                contentSecurityPolicy: {
+                    directives: {
+                        defaultSrc: ["'self'", "'unsafe-inline'"]
+                    }
+                }
+            }));
         });
     }
     installRoutes(uiConfiguration) {
