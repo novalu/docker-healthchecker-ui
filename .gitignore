@@ -11,3 +11,6 @@ src/**/*.js.map
 .directory
 
 .idea
+
+.yalc
+yalc.lock

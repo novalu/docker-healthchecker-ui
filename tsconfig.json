@@ -10,11 +10,12 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "declaration": true,
-    "rootDir": "src",
+    "rootDir": "./",
     "outDir": "dist",
     "esModuleInterop": true
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "webpack.config.ts"
   ]
 }

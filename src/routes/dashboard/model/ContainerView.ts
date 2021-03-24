@@ -1,8 +1,8 @@
 class ContainerView {
     constructor(
-        public image: string,
-        public healthText: string,
-        public healthColor: string
+        public alias: string,
+        public stateText: string,
+        public stateColor: string
     ) {}
 }
 
