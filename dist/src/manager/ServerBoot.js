@@ -58,6 +58,8 @@ const koa_static_1 = __importDefault(require("koa-static"));
 const koa_mount_1 = __importDefault(require("koa-mount"));
 const koa_router_1 = __importDefault(require("koa-router"));
 const koa_helmet_1 = __importDefault(require("koa-helmet"));
+const fs_1 = __importDefault(require("fs"));
+const http2_1 = __importDefault(require("http2"));
 let ServerBoot = class ServerBoot {
     constructor(dashboardController, logger) {
         this.dashboardController = dashboardController;
@@ -122,7 +124,18 @@ let ServerBoot = class ServerBoot {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.createApp(uiConfiguration.port);
             this.installRoutes(uiConfiguration);
-            const server = http.createServer(this.koa.callback());
+            let server;
+            if (uiConfiguration.https) {
+                const options = {
+                    key: fs_1.default.readFileSync(uiConfiguration.httpsKey),
+                    cert: fs_1.default.readFileSync(uiConfiguration.httpsCert),
+                    allowHTTP1: true
+                };
+                server = http2_1.default.createSecureServer(options, this.koa.callback());
+            }
+            else {
+                server = http.createServer(this.koa.callback());
+            }
             this.addListenCallback(server, () => __awaiter(this, void 0, void 0, function* () { return this.postStart(uiConfiguration); }));
             this.addServerErrorCallback(server, uiConfiguration);
             const portResult = Joi.number().port().validate(uiConfiguration.port);
