@@ -3,7 +3,10 @@ import {Configuration, FileConfiguration, ConsoleConsumerOptions} from "docker-h
 class UiFileConfiguration extends FileConfiguration {
     constructor(
         filePath: string,
-        public port: number = 8080
+        public port: number = 8080,
+        public https: boolean,
+        public httpsCert: string,
+        public httpsKey: string
     ) {
         super(filePath, []);
     }

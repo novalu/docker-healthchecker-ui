@@ -15,6 +15,8 @@ import Serve from "koa-static";
 import Mount from "koa-mount";
 import Router from "koa-router";
 import Helmet from "koa-helmet";
+import fs from "fs";
+import http2 from "http2";
 
 @injectable()
 class ServerBoot {
@@ -85,7 +87,19 @@ class ServerBoot {
     public async startServer(uiConfiguration: UiFileConfiguration | UiPlainConfiguration): Promise<boolean> {
         await this.createApp(uiConfiguration.port);
         this.installRoutes(uiConfiguration);
-        const server = http.createServer(this.koa.callback());
+
+        let server;
+        if (uiConfiguration.https) {
+            const options = {
+                key: fs.readFileSync(uiConfiguration.httpsKey),
+                cert: fs.readFileSync(uiConfiguration.httpsCert),
+                allowHTTP1: true
+            };
+            server = http2.createSecureServer(options, this.koa.callback());
+        } else {
+            server = http.createServer(this.koa.callback());
+        }
+
         this.addListenCallback(server, async () => this.postStart(uiConfiguration));
         this.addServerErrorCallback(server, uiConfiguration);
 
