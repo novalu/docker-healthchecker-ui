@@ -18,7 +18,10 @@ class Test {
     public async start(): Promise<boolean> {
         const configuration = new UiPlainConfiguration(
             [ "test", "test1", "test2", "test3", "test4" ],
-            8082
+            8082,
+            false,
+            "",
+            ""
         );
         return this.serverBoot.startServer(configuration);
     }

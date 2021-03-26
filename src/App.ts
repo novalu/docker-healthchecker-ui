@@ -25,20 +25,27 @@ class App {
             .alias("h", "help")
 
             .group(["image", "file"], "Images:")
-            .alias("i", "image")
             .describe("image", "Docker image to check. Could be defined more times.")
-            .array("image")
-            .string("image")
-
-            .alias("f", "file")
+                .alias("i", "image")
+                .array("image")
+                .string("image")
             .describe("file", "JSON file with image definition in format [{name: string, image: string, alias: string}, ...], where there should be at least name or image. Alias is optional.")
-            .string("file")
+                .alias("f", "file")
+                .string("file")
 
             .group("port", "Server:")
-            .alias("p", "port")
             .describe("port", "Port, on which will server run")
-            .number("port")
-            .default("port", 8080)
+                .alias("p", "port")
+                .number("port")
+                .default("port", 8080)
+            .describe("https", "Enable HTTPS")
+                .default("https", false)
+            .describe("cert", "Path to HTTPS certificate")
+                .string("cert")
+                .default("cert", "")
+            .describe("key", "Path to HTTPS private key")
+                .string("key")
+                .default("key", "")
 
             .fail((msg, err) => {
                 console.error(msg)
@@ -49,9 +56,9 @@ class App {
 
         let configuration: UiPlainConfiguration | UiFileConfiguration;
         if (argv.image !== undefined) {
-            configuration = new UiPlainConfiguration(argv.image as string[], argv.port);
+            configuration = new UiPlainConfiguration(argv.image as string[], argv.port, argv.https, argv.cert, argv.key);
         } else if (argv.file !== undefined) {
-            configuration = new UiFileConfiguration(argv.file as string, argv.port);
+            configuration = new UiFileConfiguration(argv.file as string, argv.port, argv.https, argv.cert, argv.key);
         } else {
             console.log("Image or file parameter should be provided.");
             return;
