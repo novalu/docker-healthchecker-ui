@@ -7,9 +7,11 @@ const path_1 = __importDefault(require("path"));
 const copy_webpack_plugin_1 = __importDefault(require("copy-webpack-plugin"));
 const babel_minify_webpack_plugin_1 = __importDefault(require("babel-minify-webpack-plugin"));
 const mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
-const copyPlugin = new copy_webpack_plugin_1.default({ patterns: [
+const copyPlugin = new copy_webpack_plugin_1.default({
+    patterns: [
         { from: "src/assets/images", to: "images" }
-    ] });
+    ]
+});
 const miniCssExtractPlugin = new mini_css_extract_plugin_1.default({
     filename: "stylesheets/[name].css"
 });

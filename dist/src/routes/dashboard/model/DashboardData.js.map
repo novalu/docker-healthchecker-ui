@@ -1,1 +1,1 @@
-{"version":3,"file":"DashboardData.js","sourceRoot":"","sources":["../../../../../src/routes/dashboard/model/DashboardData.ts"],"names":[],"mappings":";;;AAEA,MAAM,aAAa;IACf,YACW,UAA2B;QAA3B,eAAU,GAAV,UAAU,CAAiB;IACnC,CAAC;CACP;AAEQ,sCAAa"}
+{"version":3,"file":"DashboardData.js","sourceRoot":"","sources":["../../../../../src/routes/dashboard/model/DashboardData.ts"],"names":[],"mappings":";;;AAEA,MAAM,aAAa;IACjB,YACS,UAA2B;QAA3B,eAAU,GAAV,UAAU,CAAiB;IAEpC,CAAC;CACF;AAEO,sCAAa"}
