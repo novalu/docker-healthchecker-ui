@@ -13,6 +13,6 @@ declare class ServerBoot {
     createApp(port: number): Promise<void>;
     private installRoutes;
     private postStart;
-    startServer(uiConfiguration: UiFileConfiguration | UiPlainConfiguration): Promise<boolean>;
+    startServer(conf: UiFileConfiguration | UiPlainConfiguration): Promise<boolean>;
 }
 export { ServerBoot };

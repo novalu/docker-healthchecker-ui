@@ -1,9 +1,10 @@
 import {ContainerView} from "./ContainerView";
 
 class DashboardData {
-    constructor(
-        public containers: ContainerView[]
-    ) {}
+  constructor(
+    public containers: ContainerView[]
+  ) {
+  }
 }
 
-export { DashboardData }
+export {DashboardData}

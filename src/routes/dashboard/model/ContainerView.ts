@@ -1,9 +1,10 @@
 class ContainerView {
-    constructor(
-        public alias: string,
-        public stateText: string,
-        public stateColor: string
-    ) {}
+  constructor(
+    public alias: string,
+    public stateText: string,
+    public stateColor: string
+  ) {
+  }
 }
 
-export { ContainerView }
+export {ContainerView}
