@@ -1,12 +1,13 @@
 import path from "path";
-import webpack from 'webpack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import BabelMinifyPlugin from "babel-minify-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
-const copyPlugin = new CopyWebpackPlugin({patterns: [
-  { from: "src/assets/images", to: "images" }
-]});
+const copyPlugin = new CopyWebpackPlugin({
+  patterns: [
+    {from: "src/assets/images", to: "images"}
+  ]
+});
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
   filename: "stylesheets/[name].css"
