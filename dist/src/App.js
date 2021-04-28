@@ -124,7 +124,6 @@ let App = class App {
             if ((!image && !file) || (image && file)) {
                 this.logger.error("Only one of image and file should be provided");
             }
-            return;
             let configuration;
             if (argv.image !== undefined) {
                 configuration = new UiPlainConfiguration_1.UiPlainConfiguration(image, port, https, cert, key, ca, passphrase);
