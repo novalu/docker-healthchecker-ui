@@ -61,7 +61,7 @@
     "pretty-error": "^3.0.3",
     "pug": "^3.0.2",
     "reflect-metadata": "^0.1.13",
-    "resolve-url-loader": "^3.1.2",
+    "resolve-url-loader": "^5.0.0",
     "signale": "^1.4.0",
     "ts-loader": "^9.0.2",
     "ts-node": "^9.1.1",
