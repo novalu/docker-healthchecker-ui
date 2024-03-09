@@ -94,8 +94,8 @@ let App = class App {
                 process.exit(1);
             })
                 .argv;
-            this.logger.debug("Yargs:");
-            this.logger.debug(JSON.stringify(argv));
+            // this.logger.debug("Yargs:");
+            // this.logger.debug(JSON.stringify(argv));
             const schema = joi_1.default.object({
                 image: joi_1.default.array().items(joi_1.default.string()),
                 file: joi_1.default.string(),
@@ -119,16 +119,16 @@ let App = class App {
             const key = options.value.key;
             const ca = options.value.ca;
             const passphrase = options.value.passphrase;
-            this.logger.debug("Joi:");
-            this.logger.debug(JSON.stringify({ image, file, port, https, cert, key, ca, passphrase }));
+            // this.logger.debug("Joi:");
+            // this.logger.debug(JSON.stringify({image, file, port, https, cert, key, ca, passphrase}));
             if ((!image && !file) || (image && file)) {
                 this.logger.error("Only one of image and file should be provided");
             }
             let configuration;
-            if (argv.image !== undefined) {
+            if (image !== undefined && image.length > 0) {
                 configuration = new UiPlainConfiguration_1.UiPlainConfiguration(image, port, https, cert, key, ca, passphrase);
             }
-            else if (argv.file !== undefined) {
+            else if (file) {
                 configuration = new UiFileConfiguration_1.UiFileConfiguration(file, port, https, cert, key, ca, passphrase);
             }
             else {

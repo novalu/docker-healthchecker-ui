@@ -1,3 +1,7 @@
+# This repo has been archived.
+
+---
+
 # Docker Healthchecker UI
 
 ## CLI
